@@ -1,0 +1,64 @@
+﻿@model InstrumentDTO
+
+@{
+    ViewData["Title"] = "Instrument details";
+}
+
+<div class="row">
+    <div class="col-md-10 offset-2">
+        <div class="card mb-12">
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="card-header text-white bg-secondary">
+                        <p class="card-text">
+                            <h5 class="card-title">
+                                @Model.Name
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <img src="@Model.ImageURL" width="100%" alt="@Model.Name">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b>Brand: </b>
+                            <a asp-controller="Brands" asp-action="Details" asp-route-id="@Model.BrandId">
+                                @Model.Brand.BrandName
+                            </a>
+                        </p>
+                        <p class="card-text"><b>Instrument type: </b>@Model.InstrumentTypeValue.ToString()</p>
+                        <p class="card-text"><b>Price: </b>@Model.Price $</p>
+                        <p class="card-text">@Model.Description</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-footer">
+
+                        <p class="card-text">
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                                <a class="btn btn-danger float-right" asp-action="DeleteInstrument" asp-route-id="@Model.Id"> Delete</a>
+                            }
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                            {
+                                <form asp-action="InsertItemToStore" asp-controller="Store">
+                                    <input type="hidden" asp-for="@Model.Id" />
+                                    <input type="hidden" asp-for="@Model.BrandId" />
+                                    <input type="hidden" asp-for="@Model.Price" />
+                                    <input type="hidden" asp-for="@Model.Name" />
+                                    <input type="submit" href="@Url.Action("InsertItemToStore", "Store", new { instrument = Model })" value="Add to chart" class="btn btn-success float-right" />
+                                </form>
+                            }
+                            <a class="btn btn-outline-primary float-right" asp-action="Index">
+                                Back to store
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

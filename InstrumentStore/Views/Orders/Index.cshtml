@@ -1,0 +1,37 @@
+﻿@model IEnumerable<OrderDTO>
+@{
+    ViewData["Title"] = "List of orders";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <h4>This is list of users orders</h4>
+        }
+        @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+        {
+            <h4>This is list of your orders</h4>
+        }
+        @foreach (var order in Model)
+        {
+            <div class="card border-info m-4 col-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Order date: @order.OrderDate</li>
+                    <li class="list-group-item">Order price: @order.Price</li>
+                    <li class="list-group-item">Address: @order.Street @order.BuildingNumber / @order.ApartamentNumber @order.PostalCode </li>
+                    <li class="list-group-item">Your comment: @order.Comment</li>
+                    <li class="list-group-item">Ordered items: 
+                    @foreach (var instrument in order.OrderedItems) 
+                    {
+                        <div class="row border border-dark m-3 p-2">
+                            <a asp-action="Details" asp-controller="Instruments" asp-route-id="@instrument.InstrumentId"> @instrument.Name </a>
+                        </div>
+                    }
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+

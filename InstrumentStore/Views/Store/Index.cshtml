@@ -1,0 +1,50 @@
+﻿@model StoreDTO
+@{
+    ViewData["Title"] = "Your store";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h4>This is your store</h4>
+        </p>
+
+        <div class="row">
+            <div class="col-md-12 offset-2">
+                <p>
+                    <h5>Store summary</h5>
+                </p>
+                <div class="card" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Price: @Model.FinalPrice $</li>
+                        <li class="list-group-item">Items in store count: @Model.StoreItems.Count</li>
+                    </ul>
+                </div>
+                <p>
+                    <h4>Instruments in your store</h4>
+                </p>
+                @foreach (var instrument in Model.StoreItems)
+                {
+                    <div class="col-md-10 card">
+                        <div class="card-body">
+                            <h5 class="card-title">@instrument.Name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Price: @instrument.Price</h6>
+                            <div class=" row col-md-8">
+                                <a class="btn btn-outline-info" asp-action="Details" asp-controller="Instruments" asp-route-id="@instrument.InstrumentId">Instrument details</a>
+                                <a class="btn btn-outline-danger" asp-action="DeleteItemFromStore" asp-route-id="@instrument.InstrumentId">Delete item from store</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="col-md-12">
+                    <div class="card-footer">
+                        <a href="@Url.Action("CreateOrderView", "Orders", new { store = @JsonConvert.SerializeObject(Model)})" class="btn btn-success float-right" >Create order</a>
+                        <a class="btn btn-outline-primary float-right" asp-action="Index" asp-controller="Instruments">
+                            Back to store
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
